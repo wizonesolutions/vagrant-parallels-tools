@@ -1,6 +1,10 @@
 # This plugin isn't ready yet!
 
-It's based on `vagrant-vbguest` but still being worked on. Soon! Work is happening in the [find-replace branch](https://github.com/wizonesolutions/vagrant-parallels-tools/tree/find-replace).
+Currently, I'm just finding and replacing everything called vagrant-vbguest and then converting the logic to use the Parallels Tools. It's conceptually very similar to VirtualBox, and the user has the files on their machine, so it's just a matter of transferring them and running the script.
+
+This plugin will be simpler than *vagrant-vbguest* because we only have to care about Mac OS X.
+
+I'm developing against Parallels Desktop 8, but we'll probably need help testing Parallels Desktop 9.
 
 # vagrant-parallels-tools
 
