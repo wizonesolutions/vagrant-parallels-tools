@@ -1,6 +1,10 @@
-# vagrant-vbguest
+# This plugin isn't ready yet!
 
-*vagrant-vbguest* is a [Vagrant](http://vagrantup.com) plugin which automatically installs the host's VirtualBox Guest Additions on the guest system.
+It's based on `vagrant-vbguest` but still being worked on. Soon! Work is happening in the [find-replace branch](https://github.com/wizonesolutions/vagrant-parallels-tools/tree/find-replace).
+
+# vagrant-parallels-tools
+
+*vagrant-parallels-tools* is a [Vagrant](http://vagrantup.com) plugin which automatically installs the host's VirtualBox Guest Additions on the guest system.
 
 [![Code Climate](https://codeclimate.com/github/dotless-de/vagrant-vbguest.png)](https://codeclimate.com/github/dotless-de/vagrant-vbguest) [![Dependency Status](https://gemnasium.com/dotless-de/vagrant-vbguest.png)](https://gemnasium.com/dotless-de/vagrant-vbguest)
 
@@ -11,7 +15,7 @@ Requires vagrant 0.9.4 or later (including 1.x)
 ### Vagrant ≥ 1.1
 
 ```bash
-$ vagrant plugin install vagrant-vbguest
+$ vagrant plugin install vagrant-parallels-tools
 ```
 
 ### Vagrant 1.0 and older
@@ -33,7 +37,7 @@ Compatibly for vagrant 0.8 is provided by version 0.0.3 (which lacks a bunch of 
 
 ## Configuration / Usage
 
-If you're lucky, *vagrant-vbguest* does not require any configurations. 
+If you're lucky, *vagrant-parallels-tools* does not require any configurations. 
 However, here is an example for your `Vagrantfile`:
 
 ```ruby
@@ -72,7 +76,7 @@ Edit (create, if missing) your `~/.vagrant.d/Vagrantfile` like this:
 
 ```ruby
 # vagrant's autoloading may not have kicked in
-require 'vagrant-vbguest' unless defined? VagrantVbguest::Config
+require 'vagrant-parallels-tools' unless defined? VagrantVbguest::Config
 VagrantVbguest::Config.auto_update = false
 ```
 
@@ -81,14 +85,14 @@ Settings in a project's `Vagrantfile` will overwrite those setting. When execute
 
 ### Running as a middleware
 
-Running as a middleware will is the default way using *vagrant-vbguest*. 
+Running as a middleware will is the default way using *vagrant-parallels-tools*. 
 It will run automatically right after the box started. This is each time the box boots, i.e. `vagrant up` or `vagrant reload`. 
 It won't run on `vagrant resume` (or `vagrant up` a suspended box) to save you some time resuming a box.
 
 You may switch off the middleware by setting the vm's config `vbguest.auto_update` to `false`.
 This is a per box settings. On multi vm environments you need to set that for each vm.
 
-When *vagrant-vbguest* is running it will provide you some logs:
+When *vagrant-parallels-tools* is running it will provide you some logs:
 
     [...]
     [default] Booting VM...
@@ -199,7 +203,7 @@ $ vagrant vbguest --auto-reboot --no-provision
 
 ### ISO autodetection
 
-*vagrant-vbguest* will try to autodetect a VirtualBox GuestAdditions iso file on your system, which usually matches your installed version of VirtualBox. If it cannot find one, it downloads one from the web (virtualbox.org).   
+*vagrant-parallels-tools* will try to autodetect a VirtualBox GuestAdditions iso file on your system, which usually matches your installed version of VirtualBox. If it cannot find one, it downloads one from the web (virtualbox.org).   
 Those places will be checked in order:
 
 1. Checks your VirualBox "Virtual Media Maganger" for a DVD called "VBoxGuestAdditions.iso"
@@ -218,7 +222,7 @@ Hency, vbguest will check for a loaded kernel module after the installation has 
 
 ## Advanced Usage
 
-vagrant-vbguest provides installers for generic linux and debian/ubuntu.  
+vagrant-parallels-tools provides installers for generic linux and debian/ubuntu.  
 Installers take care of the whole installation process, that includes where to save the iso file inside the guest and where to mount it.
 
 ```ruby
