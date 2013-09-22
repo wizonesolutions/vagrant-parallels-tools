@@ -18,6 +18,7 @@ module VagrantParallelsTools
       # @return [String] The version code of the *host*'s virtualisation
       def version
         @version ||= driver.version
+        env[:ui].info "DEBUG: Parallels Desktop full version is #{version}"
       end
 
 
@@ -34,7 +35,7 @@ module VagrantParallelsTools
       # If remote downloads are prohibited (the config option +:no_remote+ IS set)
       # a +VagrantParallelsTools::IsoPathAutodetectionError+ will be thrown
       #
-      # @return [String] A absolute path to the GuestAdditions iso file.
+      # @return [String] A absolute path to the Parallels Tools iso file.
       #                  This might be a temp-file, e.g. when downloaded from web.
       def additions_file
         return @additions_file if @additions_file

@@ -4,18 +4,10 @@ module VagrantParallelsTools
 
       protected
 
-        # Default web URI, where GuestAdditions iso file can be downloaded.
-        #
-        # @return [String] A URI template containing the versions placeholder.
-        def web_path
-          "http://download.virtualbox.org/virtualbox/%{version}/VBoxGuestAdditions_%{version}.iso"
-        end
-
-
-        # Finds GuestAdditions iso file on the host system.
+        # Finds Parallels Tools iso file on the host system.
         # Returns +nil+ if none found.
         #
-        # @return [String] Absolute path to the local GuestAdditions iso file, or +nil+ if not found.
+        # @return [String] Absolute path to the local Parallels Tools iso file, or +nil+ if not found.
         def local_path
           media_manager_iso || guess_local_iso
         end
@@ -37,60 +29,44 @@ module VagrantParallelsTools
 
       private
 
-        # Helper method which queries the ParallelsTools media manager
+        # Helper method which queries optical drives via prlctl
         # for the first existing path that looks like a
         # +VBoxGuestAdditions.iso+ file.
         #
-        # @return [String] Absolute path to the local GuestAdditions iso file, or +nil+ if not found.
+        # @return [String] Absolute path to the local Parallels Tools iso file, or +nil+ if not found.
         def media_manager_iso
           driver.execute('list', 'dvds').scan(/^.+:\s+(.*VBoxGuestAdditions(?:_#{version})?\.iso)$/i).map { |path, _|
             path if File.exist?(path)
           }.compact.first
         end
 
-        # Find the first GuestAdditions iso file which exists on the host system
+        # Find the first Parallels Tools iso file which exists on the host system
         #
-        # @return [String] Absolute path to the local GuestAdditions iso file, or +nil+ if not found.
+        # @return [String] Absolute path to the local Parallels Tools iso file, or +nil+ if not found.
         def guess_local_iso
           Array(platform_path).find do |path|
             path && File.exists?(path)
           end
         end
 
-        # Makes an educated guess where the GuestAdditions iso file
+        # Makes an educated guess where the Parallels Tools iso file
         # could be found on the host system depending on the OS.
         # Returns +nil+ if no the file is not in it's place.
         def platform_path
-          [:linux, :darwin, :cygwin, :windows].each do |sys|
+          [:darwin].each do |sys|
             return self.send("#{sys}_path") if Vagrant::Util::Platform.respond_to?("#{sys}?") && Vagrant::Util::Platform.send("#{sys}?")
           end
           nil
         end
 
-        # Makes an educated guess where the GuestAdditions iso file
-        # on linux based systems
-        def linux_path
-          paths = ["/usr/share/virtualbox/VBoxGuestAdditions.iso"]
-          paths.unshift(File.join(ENV['HOME'], '.ParallelsTools', "VBoxGuestAdditions_#{version}.iso")) if ENV['HOME']
-          paths
-        end
-
-        # Makes an educated guess where the GuestAdditions iso file
+        # Makes an educated guess where the Parallels Tools iso file
         # on Macs
         def darwin_path
-          "/Applications/ParallelsTools.app/Contents/MacOS/VBoxGuestAdditions.iso"
-        end
+          # TODO: Does this work with Parallels Desktop 9?
+          parallels_base_path = "/Applications/Parallels Desktop.app/Contents/Resources/Tools"
 
-        # Makes an educated guess where the GuestAdditions iso file
-        # on windows systems
-        def windows_path
-          if (p = ENV["VBOX_INSTALL_PATH"]) && !p.empty?
-            File.join(p, "VBoxGuestAdditions.iso")
-          elsif (p = ENV["PROGRAM_FILES"] || ENV["ProgramW6432"] || ENV["PROGRAMFILES"]) && !p.empty?
-            File.join(p, "/Oracle/ParallelsTools/VBoxGuestAdditions.iso")
-          end
+          #
         end
-        alias_method :cygwin_path, :windows_path
 
         # overwrite the default version string to allow lagacy
         # '$VBOX_VERSION' as a placerholder

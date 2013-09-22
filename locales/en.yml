@@ -1,7 +1,7 @@
 en:
   vagrant_parallels_tools:
-    skipped_installation: "Updating GuestAdditions skipped."
-    skipped_rebuild: "Rebuilding GuestAdditions skipped."
+    skipped_installation: "Updating Parallels Tools skipped."
+    skipped_rebuild: "Rebuilding Parallels Tools skipped."
     installing: "Installing Parallels Tools %{installer_version} - guest version is %{guest_version}"
     installing_forced: "Forcing installation of Parallels Tools %{installer_version} - guest version is %{guest_version}"
     rebuild: "Rebuilding Parallels Tools %{guest_version} (Your host version is %{host_version})"
@@ -13,7 +13,7 @@ en:
     restart_loop_guard_activated: "Guest Additions will not load, even after reboot."
     machine_loop_guard: "Could not execute %{command} from current state %{state}. To prevent running in circles, we'll stop."
     guest_version_reports_differ: |-
-      Got different reports about installed GuestAdditions version:
+      Got different reports about installed Parallels Tools version:
       Parallels Desktop on your host claims:   %{driver}
       Parallels Tools inside the vm claims: %{service}
       Going on, assuming Parallels Tools is correct...
@@ -24,9 +24,9 @@ en:
 
     status:
       clean: "No installation found."
-      unmatched: "GuestAdditions versions on your host (%{host_version}) and guest (%{guest_version}) do not match."
-      not_running: "GuestAdditions seems to be installed (%{guest_version}) correctly, but not running."
-      ok: "GuestAdditions %{guest_version} running --- OK."
+      unmatched: "Parallels Tools versions on your host (%{host_version}) and guest (%{guest_version}) do not match."
+      not_running: "Parallels Tools seems to be installed (%{guest_version}) correctly, but not running."
+      ok: "Parallels Tools %{guest_version} running --- OK."
 
     errors:
       autodetect_iso_path: |-

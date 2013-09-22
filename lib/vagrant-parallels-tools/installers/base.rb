@@ -35,7 +35,7 @@ module VagrantParallelsTools
         @host = VagrantParallelsTools::Hosts::ParallelsTools.new(vm, options)
       end
 
-      # The absolute file path of the GuestAdditions iso file should
+      # The absolute file path of the Parallels Tools iso file should
       # be uploaded into the guest.
       # Subclasses must override this method!
       #
@@ -64,13 +64,13 @@ module VagrantParallelsTools
       def install(opts=nil, &block)
       end
 
-      # Handels the rebuild of allready running GuestAdditions
-      # It may happen, that the guest has the correct GuestAdditions
+      # Handels the rebuild of allready running Parallels Tools
+      # It may happen, that the guest has the correct Parallels Tools
       # version running, but not the kernel module is not running.
       # This method should perform a rebuild or try to reload the
-      # kernel module _without_ the GuestAdditions iso file.
+      # kernel module _without_ the Parallels Tools iso file.
       # If there is no way of rebuidling or reloading the
-      # GuestAdditions on a specific system, this method should left
+      # Parallels Tools on a specific system, this method should left
       # empty.
       # Subclasses should override this method.
       #
@@ -81,10 +81,10 @@ module VagrantParallelsTools
       def rebuild(opts=nil, &block)
       end
 
-      # Restarts the allready installed GuestAdditions
-      # It may happen, that the guest has the correct GuestAdditions
+      # Restarts the allready installed Parallels Tools
+      # It may happen, that the guest has the correct Parallels Tools
       # version installed, but for some reason are not (yet) runnig.
-      # This method should execute the GuestAdditions system specific
+      # This method should execute the Parallels Tools system specific
       # init script in order to start it manually.
       # If there is no way of doing this on a specific system,
       # this method should left empty.
@@ -97,8 +97,8 @@ module VagrantParallelsTools
       def start(opts=nil, &block)
       end
 
-      # Determinates if the GuestAdditions kernel module is loaded.
-      # This method tests if there is a working GuestAdditions
+      # Determinates if the Parallels Tools kernel module is loaded.
+      # This method tests if there is a working Parallels Tools
       # kernel module. If there is none, {#rebuild} is beeing called.
       # If there is no way of telling if there is a working
       # GuestAddition for a specific system, this method should
@@ -110,7 +110,7 @@ module VagrantParallelsTools
         true
       end
 
-      # Determinates the GuestAdditions version installed on the
+      # Determinates the Parallels Tools version installed on the
       # guest system.
       #
       # @param [Boolean] reload Whether to read the value again or use
@@ -120,16 +120,16 @@ module VagrantParallelsTools
       def guest_version(reload=false)
         return @guest_version if @guest_version && !reload
 
-        guest_version = driver.read_guest_additions_version
+        guest_version = driver.read_guest_tools_version
         guest_version = !guest_version ? nil : guest_version.gsub(/[-_]ose/i, '')
 
         @guest_version = guest_version
       end
 
 
-      # Determinates the version of the GuestAdditions installer in use
+      # Determinates the version of the Parallels Tools installer in use
       #
-      # @return [String] The version code of the GuestAdditions installer
+      # @return [String] The version code of the Parallels Tools installer
       def installer_version(path_to_installer)
         version = nil
         communicate.sudo("#{path_to_installer} --info", :error_check => false) do |type, data|
@@ -150,7 +150,7 @@ module VagrantParallelsTools
       end
 
       # Helper to yield a warning message to the user, that the installation
-      # will be rebuild using the installed GuestAdditions.
+      # will be rebuild using the installed Parallels Tools.
       # The message includes the host and installer version strings.
       def yield_rebuild_warning
         @env.ui.warn I18n.t("vagrant_parallels_tools.rebuild#{@options[:force] ? '_forced' : ''}",
@@ -173,7 +173,7 @@ module VagrantParallelsTools
       end
       alias_method :additions_file, :iso_file
 
-      # A helper method to handle the GuestAdditions iso file upload
+      # A helper method to handle the Parallels Tools iso file upload
       # into the guest box.
       # The file will uploaded to the location given by the +temp_path+ method.
       #
@@ -186,7 +186,7 @@ module VagrantParallelsTools
         communicate.upload(file, tmp_path)
       end
 
-      # A helper method to delete the uploaded GuestAdditions iso file
+      # A helper method to delete the uploaded Parallels Tools iso file
       # from the guest box
       def cleanup
         @host.cleanup

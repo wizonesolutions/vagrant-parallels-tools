@@ -17,7 +17,7 @@ module VagrantParallelsTools
         :auto_reboot => false
       }
       opts = OptionParser.new do |opts|
-        opts.banner = "Usage: vagrant prltools [vm-name] [--do start|rebuild|install] [--status] [-f|--force] [-b|--auto-reboot] [-R|--no-remote] [--iso VBoxGuestAdditions.iso]"
+        opts.banner = "Usage: vagrant prltools [vm-name] [--do start|rebuild|install] [--status] [-f|--force] [-b|--auto-reboot] [-R|--no-remote] [--iso prl-tools-{lin,mac,win,other}.iso]"
         opts.separator ""
 
         opts.on("--do COMMAND", [:start, :rebuild, :install], "Manually `start`, `rebuild` or `install` GueastAdditions.") do |command|
@@ -25,7 +25,7 @@ module VagrantParallelsTools
           options[:force] = true
         end
 
-        opts.on("--status", "Print current GuestAdditions status and exit.") do
+        opts.on("--status", "Print current Parallels Tools status and exit.") do
           options[:_method] = :status
           options[:_rebootable] = false
         end
@@ -34,7 +34,7 @@ module VagrantParallelsTools
           options[:force] = true
         end
 
-        opts.on("--auto-reboot", "-b", "Allow rebooting the VM after installation. (when GuestAdditions won't start)") do
+        opts.on("--auto-reboot", "-b", "Allow rebooting the VM after installation. (when Parallels Tools won't start)") do
           options[:auto_reboot] = true
         end
 
@@ -42,7 +42,7 @@ module VagrantParallelsTools
           options[:no_remote] = true
         end
 
-        opts.on("--iso file_or_uri", "Full path or URI to the VBoxGuestAdditions.iso") do |file_or_uri|
+        opts.on("--iso file_or_uri", "Full path or URI to the Parallels Tools ISO file") do |file_or_uri|
           options[:iso_path] = file_or_uri
         end
 

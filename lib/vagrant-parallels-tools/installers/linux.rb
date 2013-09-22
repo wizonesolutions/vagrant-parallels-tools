@@ -37,7 +37,7 @@ module VagrantParallelsTools
         '/mnt'
       end
 
-      # a generic way of installing GuestAdditions assuming all
+      # a generic way of installing Parallels Tools assuming all
       # dependencies on the guest are installed
       # @param [Hash] opts Optional options Hash wich meight get passed to {Vagrant::Communication::SSH#execute} and firends
       # @yield [type, data] Takes a Block like {Vagrant::Communication::Base#execute} for realtime output of the command being executed
@@ -120,7 +120,7 @@ module VagrantParallelsTools
         exit_status
       end
 
-      # A generic helper method for mounting the GuestAdditions iso file
+      # A generic helper method for mounting the Parallels Tools iso file
       # on most linux system.
       # Mounts the given uploaded file from +tmp_path+ on +mount_point+.
       #
@@ -132,7 +132,7 @@ module VagrantParallelsTools
         communicate.sudo("mount #{tmp_path} -o loop #{mount_point}", opts, &block)
       end
 
-      # A generic helper method for un-mounting the GuestAdditions iso file
+      # A generic helper method for un-mounting the Parallels Tools iso file
       # on most linux system
       # Unmounts the +mount_point+.
       #
