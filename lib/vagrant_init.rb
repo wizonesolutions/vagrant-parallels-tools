@@ -3,35 +3,35 @@
 begin
   require "vagrant"
 rescue LoadError
-  raise "The Vagrant VBGuest plugin must be run within Vagrant."
+  raise "The vagrant-parallels-tools plugin must be run within Vagrant."
 end
 
-require 'vagrant-vbguest/core_ext/string/interpolate'
+require 'vagrant-parallels-tools/core_ext/string/interpolate'
 
-require "vagrant-vbguest/errors"
-require 'vagrant-vbguest/vagrant_compat'
+require "vagrant-parallels-tools/errors"
+require 'vagrant-parallels-tools/vagrant_compat'
 
-require 'vagrant-vbguest/machine'
+require 'vagrant-parallels-tools/machine'
 
-require 'vagrant-vbguest/hosts/base'
-require 'vagrant-vbguest/hosts/virtualbox'
+require 'vagrant-parallels-tools/hosts/base'
+require 'vagrant-parallels-tools/hosts/parallels'
 
-require 'vagrant-vbguest/installer'
-require 'vagrant-vbguest/installers/base'
-require 'vagrant-vbguest/installers/linux'
-require 'vagrant-vbguest/installers/debian'
-require 'vagrant-vbguest/installers/ubuntu'
-require 'vagrant-vbguest/installers/redhat'
+require 'vagrant-parallels-tools/installer'
+require 'vagrant-parallels-tools/installers/base'
+require 'vagrant-parallels-tools/installers/linux'
+require 'vagrant-parallels-tools/installers/debian'
+require 'vagrant-parallels-tools/installers/ubuntu'
+require 'vagrant-parallels-tools/installers/redhat'
 
-require 'vagrant-vbguest/config'
-require 'vagrant-vbguest/command'
-require 'vagrant-vbguest/middleware'
+require 'vagrant-parallels-tools/config'
+require 'vagrant-parallels-tools/command'
+require 'vagrant-parallels-tools/middleware'
 
-Vagrant.config_keys.register(:vbguest) { VagrantVbguest::Config }
+Vagrant.config_keys.register(:prltools) { VagrantParallelsTools::Config }
 
-Vagrant.commands.register(:vbguest) { VagrantVbguest::Command }
+Vagrant.commands.register(:prltools) { VagrantParallelsTools::Command }
 
-Vagrant.actions[:start].use VagrantVbguest::Middleware
+Vagrant.actions[:start].use VagrantParallelsTools::Middleware
 
 # Add our custom translations to the load path
 I18n.load_path << File.expand_path("../../locales/en.yml", __FILE__)

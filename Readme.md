@@ -8,9 +8,9 @@ I'm developing against Parallels Desktop 8, but we'll probably need help testing
 
 # vagrant-parallels-tools
 
-*vagrant-parallels-tools* is a [Vagrant](http://vagrantup.com) plugin which automatically installs the host's VirtualBox Guest Additions on the guest system.
+*vagrant-parallels-tools* is a [Vagrant](http://vagrantup.com) plugin which automatically installs the host's Parallels Tools on the guest system.
 
-[![Code Climate](https://codeclimate.com/github/dotless-de/vagrant-vbguest.png)](https://codeclimate.com/github/dotless-de/vagrant-vbguest) [![Dependency Status](https://gemnasium.com/dotless-de/vagrant-vbguest.png)](https://gemnasium.com/dotless-de/vagrant-vbguest)
+Based on the excellent https://github.com/dotless-de/vagrant-vbguest. If you use VirtualBox for any machines, and you aren't using that plugin, you are missing out.
 
 ## Installation
 
@@ -22,23 +22,6 @@ Requires vagrant 0.9.4 or later (including 1.x)
 $ vagrant plugin install vagrant-parallels-tools
 ```
 
-### Vagrant 1.0 and older
-
-Since vagrant v1.0.0 the preferred installation method for vagrant is using the provided packages or installers.
-If you installed vagrant that way, you need to use vagrant's gem wrapper:
-
-```bash
-$ vagrant gem install vagrant-vbguest
-```
-
-If you installed vagrant using RubyGems, use:
-
-```bash
-$ gem install vagrant-vbguest
-```
-
-Compatibly for vagrant 0.8 is provided by version 0.0.3 (which lacks a bunch of new options)
-
 ## Configuration / Usage
 
 If you're lucky, *vagrant-parallels-tools* does not require any configurations. 
@@ -48,16 +31,16 @@ However, here is an example for your `Vagrantfile`:
 Vagrant::Config.run do |config|
   # we will try to autodetect this path. 
   # However, if we cannot or you have a special one you may pass it like:
-  # config.vbguest.iso_path = "#{ENV['HOME']}/Downloads/VBoxGuestAdditions.iso"
+  # config.prltools.iso_path = "#{ENV['HOME']}/Downloads/VBoxGuestAdditions.iso"
   # or
-  # config.vbguest.iso_path = "http://company.server/VirtualBox/%{version}/VBoxGuestAdditions.iso"
+  # config.prltools.iso_path = "http://company.server/VirtualBox/%{version}/VBoxGuestAdditions.iso"
   
   # set auto_update to false, if do NOT want to check the correct additions 
   # version when booting this machine
-  config.vbguest.auto_update = false
+  config.prltools.auto_update = false
   
   # do NOT download the iso file from a webserver
-  config.vbguest.no_remote = true
+  config.prltools.no_remote = true
 end
 ```
 
@@ -66,12 +49,12 @@ end
 * `iso_path` : The full path or URL to the VBoxGuestAdditions.iso file. <br/>
 The `iso_path` may contain the optional placeholder `%{version}` for the detected version (e.g. `4.1.8`).
 The URI for the actual iso download reads: `http://download.virtualbox.org/virtualbox/%{version}/VBoxGuestAdditions_%{version}.iso`<br/>
-vbguest will try to autodetect the best option for your system. WTF? see below.
+vagrant-parallels-tools will try to autodetect the best option for your system. WTF? see below.
 * `auto_update` (Boolean, default: `true`) : Whether to check the correct additions version on each start (where start is _not_ resuming a box).
 * `auto_reboot` (Boolean, default: `true` when running as a middleware, `false` when running as a command) : Whether to reboot the box after GuestAdditions has been installed, but not loaded.
 * `no_install` (Boolean, default: `false`) : Whether to check the correct additions version only. This will warn you about version mis-matches, but will not try to install anything.
 * `no_remote` (Boolean, default: `false`) : Whether to _not_ download the iso file from a remote location. This includes any `http` location!
-* `installer` (`VagrantVbguest::Installers::Base`, optional) : Reference to a (custom) installer class
+* `installer` (`VagrantParallelsTools::Installers::Base`, optional) : Reference to a (custom) installer class
 
 #### Global Configuration
 
@@ -80,8 +63,8 @@ Edit (create, if missing) your `~/.vagrant.d/Vagrantfile` like this:
 
 ```ruby
 # vagrant's autoloading may not have kicked in
-require 'vagrant-parallels-tools' unless defined? VagrantVbguest::Config
-VagrantVbguest::Config.auto_update = false
+require 'vagrant-parallels-tools' unless defined? VagrantParallelsTools::Config
+VagrantParallelsTools::Config.auto_update = false
 ```
 
 Settings in a project's `Vagrantfile` will overwrite those setting. When executed as a command, command line arguments will overwrite all of the above.
@@ -93,7 +76,7 @@ Running as a middleware will is the default way using *vagrant-parallels-tools*.
 It will run automatically right after the box started. This is each time the box boots, i.e. `vagrant up` or `vagrant reload`. 
 It won't run on `vagrant resume` (or `vagrant up` a suspended box) to save you some time resuming a box.
 
-You may switch off the middleware by setting the vm's config `vbguest.auto_update` to `false`.
+You may switch off the middleware by setting the vm's config `prltools.auto_update` to `false`.
 This is a per box settings. On multi vm environments you need to set that for each vm.
 
 When *vagrant-parallels-tools* is running it will provide you some logs:
@@ -171,7 +154,7 @@ When everything is fine, and no update is needed, you see log like:
 When you switched off the middleware auto update, or you have a box up and running you may also run the installer manually.
 
 ```bash
-$ vagrant vbguest [vm-name] [--do start|rebuild|install] [--status] [-f|--force] [-b|--auto-reboot] [-R|--no-remote] [--iso VBoxGuestAdditions.iso]
+$ vagrant prltools [vm-name] [--do start|rebuild|install] [--status] [-f|--force] [-b|--auto-reboot] [-R|--no-remote] [--iso VBoxGuestAdditions.iso]
 ```
 
 For example, when you just updated Virtual Box on your host system, you should update the gust additions right away. However, you may need to reload the box to get the guest additions working.
@@ -179,7 +162,7 @@ For example, when you just updated Virtual Box on your host system, you should u
 If you want to check the guest additions versions, without installing them, you may run:
 
 ```bash
-$ vagrant vbguest --status
+$ vagrant prltools --status
 ```
 
 Telling you either about a version mismatch:
@@ -191,16 +174,16 @@ or a match:
     [default] GuestAdditions 4.2.6 running --- OK.
 
 
-The `auto-reboot` is tured off by default, when running as a command. Vbguest will suggest you to reboot the box when needed. To turn it on simply pass the `--auto-reboot` parameter:
+The `auto-reboot` is tured off by default, when running as a command. vagrant-parallels-tools will suggest you to reboot the box when needed. To turn it on simply pass the `--auto-reboot` parameter:
 
 ```bash
-$ vagrant vbguest --auto-reboot
+$ vagrant prltools --auto-reboot
 ```
 
 You can also pass vagrant's `reload` options like:
 
 ```bash
-$ vagrant vbguest --auto-reboot --no-provision
+$ vagrant prltools --auto-reboot --no-provision
 ```
 
 
@@ -221,7 +204,7 @@ Those places will be checked in order:
 
 The VirtualBox GuestAdditions Installer will try to load the newly build kernel module. However the installer my fail to do, just as it is happening when updating GuestAdditions from version 4.1 to 4.2.
 
-Hency, vbguest will check for a loaded kernel module after the installation has finished and reboots the box, if it could not find one.
+Hency, vagrant-parallels-tools will check for a loaded kernel module after the installation has finished and reboots the box, if it could not find one.
 
 
 ## Advanced Usage
@@ -230,7 +213,7 @@ vagrant-parallels-tools provides installers for generic linux and debian/ubuntu.
 Installers take care of the whole installation process, that includes where to save the iso file inside the guest and where to mount it.
 
 ```ruby
-class MyInstaller < VagrantVbguest::Installers::Linux
+class MyInstaller < VagrantParallelsTools::Installers::Linux
 
   # use /temp instead of /tmp
   def tmp_path
@@ -252,14 +235,13 @@ class MyInstaller < VagrantVbguest::Installers::Linux
 end
 
 Vagrant::Config.run do |config|
-  config.vbguest.installer = MyInstaller
+  config.prltools.installer = MyInstaller
 end
 ```
 
 
-## Knows Issues
+## Known Issues
 
-* The installer script, which mounts and runs the GuestAdditions Installer Binary, works on linux only. Most likely it will run on most unix-like plattform.
+* The installer script, which mounts and runs the Parallels Tools Installer Binary, works on linux only. Most likely it will run on most unix-like plattform.
 * The installer script requires a directory `/mnt` on the guest system
 * On multi vm boxes, the iso file will be downloaded for each vm
-* The plugin installation on Windows host systems my not work as expected (using `vagrant gem install vagrant-vbguest`). Try `C:\vagrant\vagrant\embedded\bin\gem.bat install vagrant-vbguest` instead. (See [issue #19](https://github.com/dotless-de/vagrant-vbguest/issues/19#issuecomment-7040304))
